@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { getPostsId, updatePosts } from "../../api/blogApi";
@@ -38,21 +38,39 @@ const EditBlog = () => {
     navigate("/");
   };
 
+  useEffect(() => {
+    if (posts) {
+      setTitle(posts.title);
+      setBody(posts.body);
+    }
+  }, [posts]);
+
   return (
     <div>
-      <form onSubmit={handleUpdate}>
-        <input
-          type="text"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        <input
-          type="text"
-          value={body}
-          onChange={(e) => setBody(e.target.value)}
-        />
-        <button type="submit">submit</button>
-      </form>
+      {posts && (
+        <form
+          onSubmit={handleUpdate}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <label htmlFor="">{posts.title}</label>
+          <input
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+          <label htmlFor="">{posts.body}</label>
+
+          <input
+            type="text"
+            value={body}
+            onChange={(e) => setBody(e.target.value)}
+          />
+          <button type="submit">submit</button>
+        </form>
+      )}
     </div>
   );
 };
